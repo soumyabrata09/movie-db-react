@@ -1,8 +1,8 @@
 import { MovieCard } from "../components/MovieCard";
-import { useState, useEffect, useEffectEvent } from "react";
+import { useState, useEffect } from "react";
 import { searchMovies, getPopularMovies } from "../services/api";
 import "../css/Home.css";
-import etag from "http-server/lib/core/etag";
+import { ScrollToTop } from "../components/ScrollToTop";
 
 export const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -69,6 +69,8 @@ export const Home = () => {
           ))}
         </div>
       )}
+
+      <ScrollToTop />
     </div>
   );
 };
