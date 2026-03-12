@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import "../css/Navbar.css";
 import {
   AppBar,
@@ -12,9 +12,12 @@ import {
 import { navItems } from "../configs/navItems";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { useState } from "react";
+import { useMovieContext } from "../contexts/MovieContext";
 
 export const NavBar = () => {
+  const navigate = useNavigate();
   const [anchorElement, setAnchorElement] = useState(null);
+  const { loadTopMovies, loadPopularMovies } = useMovieContext();
   const open = Boolean(anchorElement);
   const handleMouseEnterEvent = (event) => {
     setAnchorElement(event.currentTarget);
@@ -56,12 +59,15 @@ export const NavBar = () => {
                     }
                   : {}
               }
-              endIcon={isHomePage && ((open) ? <KeyboardArrowUp /> : <KeyboardArrowDown />)}
+              endIcon={
+                isHomePage &&
+                (open ? <KeyboardArrowUp /> : <KeyboardArrowDown />)
+              }
               onMouseEnter={isHomePage ? handleMouseEnterEvent : undefined}
             >
               <span style={{ color: "wheat" }}>{item.label}</span>
             </Button>
-          );  
+          );
 
           const menu = (
             <Menu
@@ -74,10 +80,22 @@ export const NavBar = () => {
                 },
               }}
             >
-              <MenuItem onClick={handleMouseLeaveEvent}>
+              <MenuItem
+                onClick={() => {
+                  handleMouseLeaveEvent();
+                  loadPopularMovies();
+                  navigate("/home");
+                }}
+              >
                 Popular Movies
               </MenuItem>
-              <MenuItem onClick={handleMouseLeaveEvent}>
+              <MenuItem
+                onClick={() => {
+                  handleMouseLeaveEvent();
+                  loadTopMovies();
+                  navigate("/home");
+                }}
+              >
                 Top Rated Movies
               </MenuItem>
             </Menu>

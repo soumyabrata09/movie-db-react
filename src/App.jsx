@@ -14,6 +14,7 @@ export const App = () => {
       <main className="main-content">
         <Routes>
           <Route path="/" element={<Home />}></Route>
+          <Route path="/home" element={<Home />}></Route>
           <Route path="/favorites" element={<Favorites />}></Route>
           <Route path="/docs" element={<SwaggerDocs />}></Route>
         </Routes>

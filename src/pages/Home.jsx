@@ -1,47 +1,33 @@
 import { MovieCard } from "../components/MovieCard";
 import { useState, useEffect } from "react";
-import { searchMovies, getPopularMovies } from "../services/api";
 import "../css/Home.css";
 import { ScrollToTop } from "../components/ScrollToTop";
+import { useMovieContext } from "../contexts/MovieContext";
 
 export const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [movies, setMovies] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const {movies, loading, error, searchMovieList, loadPopularMovies} = useMovieContext();
 
-  useEffect(() => {
-    const loadPopularMovies = async () => {
-      try {
-        const popularMovies = await getPopularMovies();
-        setMovies(popularMovies);
-      } catch (err) {
-        console.log(err);
-        setError("Failed to load the movies...");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadPopularMovies();
-  }, []);
+  useEffect(() => { loadPopularMovies() }, []);
 
   const handleSearch = async (event) => {
     event.preventDefault();
     if (!searchQuery.trim()) return;
     if (loading) return;
 
-    setLoading(true);
-    try {
-        const searchResults = await searchMovies(searchQuery);
-        setMovies(searchResults);
-        setError(null);
-    } catch (err) {
-        console.log(err);
-        setError("Failed search movies...");
-    } finally {
-        setLoading(false);
-    }
+    searchMovieList(searchQuery);
+
+    // setLoading(true);
+    // try {
+    //     const searchResults = await searchMovies(searchQuery);
+    //     setMovies(searchResults);
+    //     setError(null);
+    // } catch (err) {
+    //     console.log(err);
+    //     setError("Failed search movies...");
+    // } finally {
+    //     setLoading(false);
+    // }
   };
 
   return (
@@ -64,7 +50,7 @@ export const Home = () => {
         <div className="loading">Loading...</div>
       ) : (
         <div className="movies-grid">
-          {movies.map((movie) => (
+          {Array.isArray(movies) && movies.map((movie) => (
             <MovieCard movie={movie} key={movie.id} />
           ))}
         </div>
