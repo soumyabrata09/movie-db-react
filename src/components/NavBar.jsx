@@ -1,9 +1,28 @@
 import { Link, NavLink } from "react-router-dom";
 import "../css/Navbar.css";
-import { AppBar, Button, Toolbar, Tooltip, Typography } from "@mui/material";
+import {
+  AppBar,
+  Button,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { navItems } from "../configs/navItems";
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import { useState } from "react";
 
 export const NavBar = () => {
+  const [anchorElement, setAnchorElement] = useState(null);
+  const open = Boolean(anchorElement);
+  const handleMouseEnterEvent = (event) => {
+    setAnchorElement(event.currentTarget);
+  };
+  const handleMouseLeaveEvent = () => {
+    setAnchorElement(null);
+  };
+
   return (
     <AppBar position="static">
       <Toolbar className="navbar">
@@ -20,6 +39,8 @@ export const NavBar = () => {
         {/* Navigation buttons */}
         <Tooltip title="open swagger docs"></Tooltip>
         {navItems.map((item) => {
+          const isHomePage = item.label === "Home";
+          const isApiDoc = item.label === "Api-Docs";
           const navBtn = (
             <Button
               key={item.index}
@@ -35,18 +56,54 @@ export const NavBar = () => {
                     }
                   : {}
               }
+              endIcon={isHomePage && ((open) ? <KeyboardArrowUp /> : <KeyboardArrowDown />)}
+              onMouseEnter={isHomePage ? handleMouseEnterEvent : undefined}
             >
               <span style={{ color: "wheat" }}>{item.label}</span>
             </Button>
+          );  
+
+          const menu = (
+            <Menu
+              anchorEl={anchorElement}
+              open={open}
+              onClose={handleMouseLeaveEvent}
+              slotProps={{
+                list: {
+                  onMouseLeave: handleMouseLeaveEvent,
+                },
+              }}
+            >
+              <MenuItem onClick={handleMouseLeaveEvent}>
+                Popular Movies
+              </MenuItem>
+              <MenuItem onClick={handleMouseLeaveEvent}>
+                Top Rated Movies
+              </MenuItem>
+            </Menu>
           );
 
-          return item.path === "/docs" ? (
-            <Tooltip key={item.index} title="swagger docs">
-              {navBtn}
-            </Tooltip>
-          ) : (
-            navBtn
-          );
+          // Wrap Api-Docs with ToolTop
+          if (isApiDoc) {
+            return (
+              <Tooltip key={item.index} title="Open Swagger Docs">
+                {navBtn}
+              </Tooltip>
+            );
+          }
+
+          // Wrap Home in a Div with Menu
+          if (isHomePage) {
+            return (
+              <div key={item.index} onMouseLeave={handleMouseLeaveEvent}>
+                {navBtn}
+                {menu}
+              </div>
+            );
+          }
+
+          //Default: only navBtn render
+          return navBtn;
         })}
       </Toolbar>
     </AppBar>
