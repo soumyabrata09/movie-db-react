@@ -10,6 +10,9 @@
 .navbar-brand {
   font-size: 1.5rem;
   font-weight: bold;
+  text-decoration: none;
+  flex-grow: 1;
+  color: wheat;
 }
 
 .navbar-links {
