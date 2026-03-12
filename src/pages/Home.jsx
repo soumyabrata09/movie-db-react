@@ -3,12 +3,17 @@ import { useState, useEffect } from "react";
 import "../css/Home.css";
 import { ScrollToTop } from "../components/ScrollToTop";
 import { useMovieContext } from "../contexts/MovieContext";
+import { CircularProgress, Stack } from "@mui/material";
+import { Loader } from "../components/Loader";
 
 export const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const {movies, loading, error, searchMovieList, loadPopularMovies} = useMovieContext();
+  const { movies, loading, error, searchMovieList, loadPopularMovies } =
+    useMovieContext();
 
-  useEffect(() => { loadPopularMovies() }, []);
+  useEffect(() => {
+    loadPopularMovies();
+  }, []);
 
   const handleSearch = async (event) => {
     event.preventDefault();
@@ -47,12 +52,11 @@ export const Home = () => {
 
       {error && <div className="error-message">{error}</div>}
       {loading ? (
-        <div className="loading">Loading...</div>
+        <Loader />
       ) : (
         <div className="movies-grid">
-          {Array.isArray(movies) && movies.map((movie) => (
-            <MovieCard movie={movie} key={movie.id} />
-          ))}
+          {Array.isArray(movies) &&
+            movies.map((movie) => <MovieCard movie={movie} key={movie.id} />)}
         </div>
       )}
 
