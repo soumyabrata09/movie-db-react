@@ -1,8 +1,11 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import "../css/Navbar.css";
+import * as Icons from "@mui/icons-material";
 import {
   AppBar,
   Button,
+  ListItemIcon,
+  ListItemText,
   Menu,
   MenuItem,
   Toolbar,
@@ -13,6 +16,9 @@ import { navItems } from "../configs/navItems";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { useState } from "react";
 import { useMovieContext } from "../contexts/MovieContext";
+import { IconColors } from "../configs/iconColors";
+import { MenuListItem } from "./MenuListItem";
+import { NavMenu } from "./NavMenu";
 
 export const NavBar = () => {
   const navigate = useNavigate();
@@ -70,35 +76,11 @@ export const NavBar = () => {
           );
 
           const menu = (
-            <Menu
+            <NavMenu
               anchorEl={anchorElement}
               open={open}
-              onClose={handleMouseLeaveEvent}
-              slotProps={{
-                list: {
-                  onMouseLeave: handleMouseLeaveEvent,
-                },
-              }}
-            >
-              <MenuItem
-                onClick={() => {
-                  handleMouseLeaveEvent();
-                  loadPopularMovies();
-                  navigate("/home");
-                }}
-              >
-                Popular Movies
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  handleMouseLeaveEvent();
-                  loadTopMovies();
-                  navigate("/home");
-                }}
-              >
-                Top Rated Movies
-              </MenuItem>
-            </Menu>
+              onMouseLeave={handleMouseLeaveEvent}
+            ></NavMenu>
           );
 
           // Wrap Api-Docs with ToolTop

@@ -5,6 +5,7 @@ import { Favorites } from './pages/Favorites';
 import { NavBar } from './components/NavBar';
 import { MovieProvider } from './contexts/MovieContext';
 import { SwaggerDocs } from './pages/SwaggerDocs';
+import { AppRoutes } from './configs/appRoutes';
 
 export const App = () => {
 
@@ -13,10 +14,10 @@ export const App = () => {
       <NavBar />
       <main className="main-content">
         <Routes>
-          <Route path="/" element={<Home />}></Route>
-          <Route path="/home" element={<Home />}></Route>
-          <Route path="/favorites" element={<Favorites />}></Route>
-          <Route path="/docs" element={<SwaggerDocs />}></Route>
+          <Route path={AppRoutes.ROOT} element={<Home />}></Route>
+          <Route path={AppRoutes.HOMEPAGE} element={<Home />}></Route>
+          <Route path={AppRoutes.FAVS} element={<Favorites />}></Route>
+          <Route path={AppRoutes.DOCS} element={<SwaggerDocs />}></Route>
         </Routes>
       </main>
     </MovieProvider>
